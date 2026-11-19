@@ -6,11 +6,20 @@ A curated collection of delightful, funny, and animated UI micro-interactions im
 
 ## 🎨 Component Showcase
 
-| # | Component | Platforms | Preview & Code | Status |
-|:---:|:---|:---:|:---:|:---:|
-| **01** | **Animated Delete Button** | Web & Android | [View Component](./01-animated-delete-button) | ✅ Ready |
-| **02** | **Bouncy Bottom Navigation** | Web & Android | [View Component](./02-bouncy-bottom-nav) | ⏳ In Progress |
-| **03** | **Magic Add Button** | Web & Android | [View Component](./03-magic-add-button) | ⏳ In Progress |
+### 01. Animated Delete Button 🗑️
+> Letters flying into the trash bin with shake and haptic/sound effects.
+
+<p align="center">
+  <a href="./01-animated-delete-button">
+    <img src="./01-animated-delete-button/preview.gif" alt="Animated Delete Button" width="260" />
+  </a>
+</p>
+
+| Component | Platforms | Code & Guide | Status |
+|:---|:---:|:---:|:---:|
+| **Animated Delete Button** | Web & Android (Compose) | [Explore Component](./01-animated-delete-button) | ✅ Ready |
+| **Bouncy Bottom Navigation** | Web & Android | [Explore Component](./02-bouncy-bottom-nav) | ⏳ In Progress |
+| **Magic Add Button** | Web & Android | [Explore Component](./03-magic-add-button) | ⏳ In Progress |
 
 ---
 
@@ -19,6 +28,7 @@ A curated collection of delightful, funny, and animated UI micro-interactions im
 ```text
 playful-ui/
 ├── 01-animated-delete-button/
+│   ├── preview.gif
 │   ├── web/
 │   │   └── index.html
 │   ├── android/
