@@ -29,44 +29,59 @@
       font-size: 13px;
       letter-spacing: 2px;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
       user-select: none;
+      transition: color 0.3s;
     }
 
     /* Delete Button */
     .delete-btn {
       position: relative;
       outline: none;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       background: linear-gradient(135deg, #8b5cf6, #6366f1);
       color: #ffffff;
-      padding: 16px 36px;
+      padding: 0 32px;
       border-radius: 9999px;
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 14px;
+      justify-content: center;
+      gap: 12px;
+      width: 192px;
+      height: 60px;
       box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.45),
                   0 0 20px 2px rgba(139, 92, 246, 0.3);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  gap 0.3s ease,
+                  padding 0.3s ease,
+                  transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.2s ease;
       user-select: none;
+      overflow: hidden;
     }
 
-    .delete-btn:hover {
+    .delete-btn:hover:not(.disabled) {
       transform: translateY(-2px);
       box-shadow: 0 14px 30px -4px rgba(99, 102, 241, 0.6),
                   0 0 28px 4px rgba(139, 92, 246, 0.4);
     }
 
-    .delete-btn:active {
+    .delete-btn:active:not(.disabled) {
       transform: translateY(1px);
     }
 
     .delete-btn.disabled {
       pointer-events: none;
-      filter: brightness(0.9);
+    }
+
+    /* Collapsed Circle State */
+    .delete-btn.collapsed {
+      width: 60px;
+      padding: 0;
+      gap: 0;
     }
 
     /* Trash Can Icon */
@@ -78,7 +93,8 @@
       align-items: center;
       justify-content: center;
       transform-origin: center bottom;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
     }
 
     .trash-svg {
@@ -87,51 +103,73 @@
       overflow: visible;
     }
 
-    /* Lid opening animation */
+    /* Trash Tilt & Lid opening */
+    .trash-wrapper.open {
+      transform: rotate(-12deg);
+    }
+
     .trash-lid {
       transform-origin: 3px 6px;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .trash-wrapper.open .trash-lid {
-      transform: rotate(-35deg) translate(-2px, -3px);
+      transform: rotate(-38deg) translate(-2px, -3px);
     }
 
-    /* Impact shake when a letter drops in */
+    /* Impact shake when a letter drops in or empty jump */
     .trash-wrapper.impact-shake {
       animation: shake 0.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
 
     @keyframes shake {
-      0% { transform: scale(1) rotate(0deg); }
-      30% { transform: scale(1.15) rotate(-6deg); }
-      60% { transform: scale(0.95) rotate(4deg); }
-      100% { transform: scale(1) rotate(0deg); }
+      0% { transform: scale(1) rotate(-12deg); }
+      30% { transform: scale(1.15) rotate(-16deg); }
+      60% { transform: scale(0.95) rotate(-8deg); }
+      100% { transform: scale(1) rotate(-12deg); }
+    }
+
+    .trash-wrapper.empty-pop {
+      animation: popJump 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes popJump {
+      0% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.2) translateY(-4px); }
+      100% { transform: scale(1) translateY(0); }
     }
 
     /* Liquid inside trash bin */
     .trash-liquid {
       transform-origin: bottom center;
       transform: scaleY(0);
-      transition: transform 0.18s ease-out;
+      transition: transform 0.15s ease-out;
       fill: #38bdf8;
     }
 
     /* Text Wrapper & Letters */
     .text-wrapper {
       position: relative;
-      display: flex;
+      display: inline-flex;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .delete-btn.collapsed .text-wrapper {
+      opacity: 0;
+      transform: scale(0);
+      pointer-events: none;
+      width: 0;
     }
 
     .letter {
       display: inline-block;
       position: relative;
-      transition: opacity 0.2s;
     }
 
     /* Flying animation for individual letters */
     .letter.flying {
-      animation: flyIntoTrash 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      animation: flyIntoTrash 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     }
 
     @keyframes flyIntoTrash {
@@ -140,17 +178,14 @@
         opacity: 1;
       }
       40% {
-        /* Parabolic arc upward and leftward toward the trash bin */
-        transform: translate(calc(var(--fly-dist) * -0.5), -32px) rotate(-15deg) scale(0.85);
+        transform: translate(calc(var(--fly-dist) * -0.5), -36px) rotate(-18deg) scale(0.85);
         opacity: 1;
       }
       80% {
-        /* Landing inside the trash */
-        transform: translate(calc(var(--fly-dist) * -1), -6px) rotate(-40deg) scale(0.35);
+        transform: translate(calc(var(--fly-dist) * -1), -6px) rotate(-42deg) scale(0.35);
         opacity: 0.8;
       }
       100% {
-        /* Disappears into the bin */
         transform: translate(calc(var(--fly-dist) * -1.02), 4px) rotate(-55deg) scale(0.1);
         opacity: 0;
       }
@@ -177,7 +212,7 @@
 <body>
 
   <button class="delete-btn" id="deleteBtn">
-    <!-- Trash SVG Icon -->
+    <!-- Trash SVG Icon matching Android Compose version precisely -->
     <div class="trash-wrapper" id="trashWrapper">
       <svg class="trash-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <!-- Mask for liquid inside trash body -->
@@ -188,7 +223,7 @@
         <!-- Liquid fill -->
         <rect id="liquid" class="trash-liquid" x="5" y="6" width="14" height="16" clip-path="url(#trashClip)" stroke="none" />
 
-        <!-- Lid Group -->
+        <!-- Lid Group (Hinged at left) -->
         <g class="trash-lid" id="trashLid">
           <path d="M3 6h18" />
           <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
@@ -212,7 +247,7 @@
     </div>
   </button>
 
-  <p class="hint-text">PRESIONA PARA ELIMINAR</p>
+  <p class="hint-text" id="hintText">PRESS TO DELETE</p>
 
   <button class="reset-btn" id="resetBtn">🔄 Reset Animation</button>
 
@@ -221,9 +256,10 @@
     const trashWrapper = document.getElementById('trashWrapper');
     const liquid = document.getElementById('liquid');
     const letters = document.querySelectorAll('.letter');
+    const hintText = document.getElementById('hintText');
     const resetBtn = document.getElementById('resetBtn');
 
-    // Synthetic sound effect with Web Audio API (no external audio files required)
+    // Procedural sound synthesis with Web Audio API (same frequency curve as Android)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playTrashDropSound(index) {
       if (audioCtx.state === 'suspended') {
@@ -232,7 +268,6 @@
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
 
-      // Pitch rises slightly with each letter dropping into the bin
       const baseFreq = 260 + (index * 35);
       osc.type = 'sine';
       osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
@@ -249,52 +284,72 @@
     }
 
     const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
     const liquidLevels = [20, 40, 58, 75, 88, 100];
     let isDeleting = false;
 
-    deleteBtn.addEventListener('click', async () => {
+    async function runDeleteSequence() {
       if (isDeleting) return;
       isDeleting = true;
       deleteBtn.classList.add('disabled');
+      hintText.textContent = "DELETING...";
 
-      // Open trash lid
+      // Phase 1: Tilt trash can & open lid
       trashWrapper.classList.add('open');
       await wait(200);
 
-      // Pour letters one by one
+      // Phase 2: Pour letters one by one
       for (let i = 0; i < letters.length; i++) {
         letters[i].classList.add('flying');
 
         setTimeout(() => {
-          // Fill liquid & shake
           liquid.style.transform = `scaleY(${liquidLevels[i] / 100})`;
           playTrashDropSound(i);
 
           trashWrapper.classList.remove('impact-shake');
-          // Trigger reflow to restart CSS animation
-          void trashWrapper.offsetWidth;
+          void trashWrapper.offsetWidth; // Reflow
           trashWrapper.classList.add('impact-shake');
-        }, 300);
+        }, 260);
 
         await wait(120);
       }
 
-      // Close trash lid after all letters land
-      await wait(350);
+      // Phase 3: Close lid & straighten trash can
+      await wait(380);
       trashWrapper.classList.remove('open');
       trashWrapper.classList.remove('impact-shake');
-    });
+      await wait(220);
 
-    // Reset button to test again
+      // Phase 4: Collapse button into a compact circle around the trash can
+      deleteBtn.classList.add('collapsed');
+      await wait(500);
+
+      // Phase 5: Empty out liquid with a pop jump
+      liquid.style.transform = 'scaleY(0)';
+      trashWrapper.classList.add('empty-pop');
+      await wait(400);
+      trashWrapper.classList.remove('empty-pop');
+
+      // Phase 6: Expand button back to normal
+      deleteBtn.classList.remove('collapsed');
+      await wait(350);
+
+      // Reset letters & state
+      letters.forEach(letter => letter.classList.remove('flying'));
+      deleteBtn.classList.remove('disabled');
+      hintText.textContent = "PRESS TO DELETE";
+      isDeleting = false;
+    }
+
+    deleteBtn.addEventListener('click', runDeleteSequence);
+
+    // Reset button for manual reset
     resetBtn.addEventListener('click', () => {
       isDeleting = false;
-      deleteBtn.classList.remove('disabled');
-      trashWrapper.classList.remove('open', 'impact-shake');
+      deleteBtn.classList.remove('disabled', 'collapsed');
+      trashWrapper.classList.remove('open', 'impact-shake', 'empty-pop');
       liquid.style.transform = 'scaleY(0)';
-      letters.forEach(letter => {
-        letter.classList.remove('flying');
-      });
+      letters.forEach(letter => letter.classList.remove('flying'));
+      hintText.textContent = "PRESS TO DELETE";
     });
   </script>
 </body>
