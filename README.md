@@ -9,11 +9,7 @@ A curated collection of delightful, funny, and animated UI micro-interactions im
 ### 01. Animated Delete Button 🗑️
 > Letters flying into the trash bin with shake and haptic/sound effects.
 
-<p align="center">
-  <a href="./01-animated-delete-button">
-    <img src="./01-animated-delete-button/preview.gif" alt="Animated Delete Button" width="260" />
-  </a>
-</p>
+
 
 | Component | Platforms | Code & Guide | Status |
 |:---|:---:|:---:|:---:|
