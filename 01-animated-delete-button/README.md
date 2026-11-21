@@ -3,7 +3,7 @@
 A playful and delightful delete button with a micro-interaction where each letter flies into the trash bin one by one with a shake effect and audio/haptic feedback.
 
 <p align="center">
-  <!-- <img src="./preview.gif" alt="Animated Delete Button Preview" width="280" /> -->
+  <img src="./preview.gif" alt="Animated Delete Button Preview" width="280" />
 </p>
 
 ---
